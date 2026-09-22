@@ -1,0 +1,12 @@
+map_generator/output/
+
+__pycache__/
+*.pyc
+
+build/
+*.o
+*.so
+*.a
+
+*.swp
+
