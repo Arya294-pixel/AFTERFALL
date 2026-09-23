@@ -1,0 +1,231 @@
+{
+  "version": 1,
+
+  "islands": {
+    "1": {
+      "name": "Hub",
+
+      "terrain": {
+        "type": "grassland",
+        "height": "gentle",
+        "vegetation": "moderate"
+      },
+
+      "objects": [
+        {
+          "type": 8,
+          "x": 250,
+          "y": 20,
+          "z": 180
+        },
+        {
+          "type": 10,
+          "x": 320,
+          "y": 20,
+          "z": 210
+        },
+        {
+          "type": 12,
+          "x": 200,
+          "y": 20,
+          "z": 220
+        },
+        {
+          "type": 15,
+          "x": 500,
+          "y": 20,
+          "z": 500
+        }
+      ],
+
+      "npcs": [
+        {
+          "type": "wood_cutter",
+          "x": 210,
+          "y": 20,
+          "z": 220
+        },
+        {
+          "type": "weapon_dealer",
+          "x": 320,
+          "y": 20,
+          "z": 210
+        }
+      ]
+    },
+
+    "2": {
+      "name": "Deep Forest",
+
+      "terrain": {
+        "type": "forest",
+        "height": "hilly",
+        "vegetation": "dense"
+      },
+
+      "objects": [
+        {
+          "type": 1,
+          "x": 100,
+          "y": 30,
+          "z": 100
+        },
+        {
+          "type": 2,
+          "x": 150,
+          "y": 35,
+          "z": 130
+        },
+        {
+          "type": 6,
+          "x": 220,
+          "y": 40,
+          "z": 200
+        },
+        {
+          "type": 14,
+          "x": 300,
+          "y": 30,
+          "z": 250
+        }
+      ],
+
+      "npcs": [
+        {
+          "type": "quest_dealer",
+          "x": 120,
+          "y": 35,
+          "z": 90
+        }
+      ]
+    },
+
+    "3": {
+      "name": "Ancient Highlands",
+
+      "terrain": {
+        "type": "highlands",
+        "height": "rocky",
+        "vegetation": "sparse"
+      },
+
+      "objects": [
+        {
+          "type": 6,
+          "x": 200,
+          "y": 100,
+          "z": 200
+        },
+        {
+          "type": 18,
+          "x": 350,
+          "y": 110,
+          "z": 300
+        },
+        {
+          "type": 20,
+          "x": 450,
+          "y": 120,
+          "z": 400
+        },
+        {
+          "type": 21,
+          "x": 600,
+          "y": 130,
+          "z": 500
+        }
+      ],
+
+      "npcs": []
+    },
+
+    "4": {
+      "name": "Mountain Forest",
+
+      "terrain": {
+        "type": "mountain_forest",
+        "height": "mountainous",
+        "vegetation": "dense"
+      },
+
+      "objects": [
+        {
+          "type": 2,
+          "x": 150,
+          "y": 60,
+          "z": 150
+        },
+        {
+          "type": 7,
+          "x": 280,
+          "y": 80,
+          "z": 300
+        },
+        {
+          "type": 22,
+          "x": 400,
+          "y": 120,
+          "z": 450
+        },
+        {
+          "type": 23,
+          "x": 500,
+          "y": 150,
+          "z": 520
+        }
+      ],
+
+      "npcs": [
+        {
+          "type": "cave_quest_npc",
+          "x": 410,
+          "y": 150,
+          "z": 500
+        }
+      ]
+    },
+
+    "5": {
+      "name": "Boss Island",
+
+      "terrain": {
+        "type": "rocky",
+        "height": "low",
+        "vegetation": "sparse"
+      },
+
+      "objects": [
+        {
+          "type": 6,
+          "x": 150,
+          "y": 25,
+          "z": 180
+        },
+        {
+          "type": 19,
+          "x": 300,
+          "y": 30,
+          "z": 300
+        }
+      ],
+
+      "npcs": [
+        {
+          "type": "quest_dealer",
+          "x": 100,
+          "y": 25,
+          "z": 100
+        }
+      ],
+
+      "bosses": [
+        {
+          "type": "island_5_boss",
+          "x": 500,
+          "y": 30,
+          "z": 500
+        }
+      ]
+    }
+  }
+}

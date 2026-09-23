@@ -1,0 +1,43 @@
+{
+  "version": 1,
+
+  "object_types": {
+    "1": "oak_tree",
+    "2": "pine_tree",
+    "3": "birch_tree",
+    "4": "dead_tree",
+
+    "5": "rock",
+    "6": "large_rock",
+    "7": "boulder",
+
+    "8": "house",
+    "9": "small_house",
+    "10": "shop",
+    "11": "weapon_dealer_building",
+    "12": "wood_cutter_building",
+
+    "13": "wall",
+    "14": "fence",
+    "15": "bridge",
+    "16": "wooden_bridge",
+    "17": "stone_bridge",
+
+    "18": "ruins_wall",
+    "19": "ruins_pillar",
+    "20": "statue",
+    "21": "ancient_monument",
+
+    "22": "waterfall",
+    "23": "cave_entrance",
+
+    "24": "temple",
+    "25": "fortress",
+
+    "26": "boss_arena_structure",
+    "27": "path_marker",
+    "28": "fallen_tree",
+    "29": "bush",
+    "30": "grass_cluster"
+  }
+}
