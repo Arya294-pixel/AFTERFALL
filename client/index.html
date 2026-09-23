@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AFTERFALL Map Viewer</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: #111;
+            color: #eee;
+            font-family: monospace;
+        }
+
+        h1 {
+            margin-top: 0;
+        }
+
+        #status {
+            margin-bottom: 20px;
+        }
+
+        .island {
+            border: 1px solid #555;
+            margin: 10px 0;
+            padding: 10px;
+            background: #1b1b1b;
+        }
+
+        .object {
+            margin-left: 20px;
+        }
+
+        .success {
+            color: #6f6;
+        }
+
+        .error {
+            color: #f66;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>AFTERFALL Map Viewer</h1>
+
+    <div id="status">
+        Loading map...
+    </div>
+
+    <div id="map"></div>
+
+    <script src="viewer.js"></script>
+
+</body>
+</html>
