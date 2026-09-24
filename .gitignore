@@ -1,4 +1,4 @@
-map_generator/output/
+*.l2s*
 
 __pycache__/
 *.pyc

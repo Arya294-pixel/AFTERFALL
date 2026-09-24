@@ -3,6 +3,8 @@
 import json
 import struct
 import sys
+import math
+import re
 from pathlib import Path
 
 
@@ -13,7 +15,7 @@ from pathlib import Path
 HEADER_SIZE = 60
 
 MAGIC = b"AFMP"
-VERSION = 1
+VERSION = 2
 FLAGS = 0
 MAP_ID = 1
 
@@ -52,6 +54,129 @@ OBJECT_FILE = ROOT_DIR / "object.json"
 OUTPUT_DIR = BASE_DIR / "output"
 OUTPUT_FILE = OUTPUT_DIR / "afterfall.afmap"
 
+# ============================================================
+# PARSERS
+# ============================================================
+
+DEG_RE = re.compile(
+    r"^\s*(-?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+))\s*deg\s*$"
+)
+
+RAD_RE = re.compile(
+    r"^\s*(-?(?:[0-9]+(?:\.[0-9]+)?|\.[0-9]+))\s*rad\s*$"
+)
+
+UINT32_RE = re.compile(
+    r"^\s*([0-9]+)\s*$"
+)
+
+
+
+def rotation_to_uint32(value: str|int) -> int:
+    """
+    Convert a rotation value to the AFTERFALL uint32 representation.
+
+    Accepted:
+        "90 deg"
+        "-10 deg"
+        "60.4 deg"
+        "1.5707963267948966 rad"
+        "-0.5 rad"
+        "1073741824"
+
+    Binary representation:
+        0 <= N <= 2^32 - 1
+
+    Angle representation:
+        0 <= angle < 360 degrees
+    """
+
+    if value is None:
+        return 0   # no rotation
+
+    UINT32_MAX = 0xFFFFFFFF
+    UINT32_SCALE = 2**32
+
+    if isinstance(value, int):
+        if 0 <= value <= UINT32_MAX:
+            return value
+        raise ValueError(
+            f"rotation integer out of uint32 range: {value}"
+        )
+
+    if not isinstance(value, str):
+        raise TypeError(
+            f"rotation must be a string, got {type(value).__name__}"
+        )
+
+    value = value.strip()
+
+    # --------------------------------------------------------
+    # Already encoded uint32
+    # --------------------------------------------------------
+
+    match = UINT32_RE.fullmatch(value)
+
+    if match:
+        encoded = int(match.group(1))
+
+        if encoded > UINT32_MAX:
+            raise ValueError(
+                f"rotation integer out of uint32 range: {encoded}"
+            )
+
+        return encoded
+
+    # --------------------------------------------------------
+    # Degrees
+    # --------------------------------------------------------
+
+    match = DEG_RE.fullmatch(value)
+
+    if match:
+        degrees = float(match.group(1))
+
+        if not math.isfinite(degrees):
+            raise ValueError("rotation degrees must be finite")
+
+        degrees %= 360.0
+
+        encoded = int(
+            degrees * UINT32_SCALE / 360.0
+        )
+
+        return encoded & UINT32_MAX
+
+    # --------------------------------------------------------
+    # Radians
+    # --------------------------------------------------------
+
+    match = RAD_RE.fullmatch(value)
+
+    if match:
+        radians = float(match.group(1))
+
+        if not math.isfinite(radians):
+            raise ValueError("rotation radians must be finite")
+
+        degrees = math.degrees(radians)
+        degrees %= 360.0
+
+        encoded = int(
+            degrees * UINT32_SCALE / 360.0
+        )
+
+        return encoded & UINT32_MAX
+
+    # --------------------------------------------------------
+    # Invalid
+    # --------------------------------------------------------
+
+    raise ValueError(
+        f"invalid rotation value: {value!r}; "
+        "expected '<number> deg', '<number> rad', "
+        "or an unsigned integer"
+    )
 
 # ============================================================
 # JSON
@@ -262,9 +387,14 @@ def build_object_data(island, name_to_id):
     Current object record:
 
         uint16 type
+
         int64 x
         int64 y
         int64 z
+
+        uint32 rotation_x
+        uint32 rotation_y
+        uint32 rotation_z
     """
 
     objects = island.get("objects", [])
@@ -306,11 +436,14 @@ def build_object_data(island, name_to_id):
             )
 
         data += struct.pack(
-            "<Hqqq",
+            "<HqqqIII",
             object_id,
             int(obj["x"]),
             int(obj["y"]),
             int(obj["z"]),
+            rotation_to_uint32(obj.get("rotation_x")),
+            rotation_to_uint32(obj.get("rotation_y")),
+            rotation_to_uint32(obj.get("rotation_z"))
         )
 
     return bytes(data)
@@ -322,6 +455,16 @@ def build_object_data(island, name_to_id):
 
 def build_npc_data(island):
     """
+    uint16 id
+
+    uint32 x
+    uint32 y
+    uint32 z
+
+    uint32 rotation_x
+    uint32 rotation_y
+    uint32 rotation_z
+
     NPCs currently use their string type names.
 
     For the prototype we give each unique NPC type a local
@@ -351,11 +494,14 @@ def build_npc_data(island):
         npc_id = npc_ids[npc_type]
 
         data += struct.pack(
-            "<Hqqq",
+            "<HqqqIII",
             npc_id,
             int(npc["x"]),
             int(npc["y"]),
             int(npc["z"]),
+            rotation_to_uint32(npc.get("rotation_x")),
+            rotation_to_uint32(npc.get("rotation_y")),
+            rotation_to_uint32(npc.get("rotation_z"))
         )
 
     return bytes(data)
@@ -367,6 +513,16 @@ def build_npc_data(island):
 
 def build_boss_data(island):
     """
+    uint16 id
+
+    uint32 x
+    uint32 y
+    uint32 z
+
+    uint32 rotation_x
+    uint32 rotation_y
+    uint32 rotation_z
+
     Bosses currently use their string type names.
 
     For the prototype they receive local uint16 IDs.
@@ -393,11 +549,14 @@ def build_boss_data(island):
         boss_id = boss_ids[boss_type]
 
         data += struct.pack(
-            "<Hqqq",
+            "<HqqqIII",
             boss_id,
             int(boss["x"]),
             int(boss["y"]),
             int(boss["z"]),
+            rotation_to_uint32(boss.get("rotation_x")),
+            rotation_to_uint32(boss.get("rotation_y")),
+            rotation_to_uint32(boss.get("rotation_z"))
         )
 
     return bytes(data)

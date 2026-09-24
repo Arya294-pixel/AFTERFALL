@@ -24,6 +24,14 @@ const HEADER_SIZE = 60;
     0x34  8   npc_section_offset
 */
 
+function readUint32(view, offset){
+	return Number(
+		view.getUint32(
+			offset,
+			true
+		)
+	)
+}
 
 function readInt64(view, offset) {
     return Number(
@@ -201,7 +209,23 @@ function readObject(view, offset) {
             readInt64(
                 view,
                 offset + 18
-            )
+            ),
+        rotation_x:
+        	readUint32(
+        		view,
+        		offset + 26
+        	),
+        rotation_y:
+        	readUint32(
+        		view,
+        		offset + 30
+        	),
+        rotation_z:
+        	readUint32(
+        		view,
+        		offset + 34
+        	)
+
     };
 }
 
@@ -246,7 +270,7 @@ function parseIsland(view, range) {
             )
         );
 
-        offset += 26;
+        offset += 38;
     }
 
 
@@ -277,7 +301,7 @@ function parseIsland(view, range) {
             )
         );
 
-        offset += 26;
+        offset += 38;
     }
 
 
@@ -308,7 +332,7 @@ function parseIsland(view, range) {
             )
         );
 
-        offset += 26;
+        offset += 38;
     }
 
 
